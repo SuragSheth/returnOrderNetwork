@@ -1,0 +1,74 @@
+namespace org.example.Alice;
+
+enum OrderSize {
+  o L
+  o M
+  o S
+  o XS
+  o XXL
+}
+
+concept Options {
+  o OrderSize orderSize
+  o String[] extras
+}
+
+participant Customer identified by customerId {
+  o String customerId
+  o String firstName
+  o String lastName
+  o String address
+}
+
+participant WebsiteRequest identified by requestId {
+  o String requestId
+  --> Customer customer
+  --> Item purchasedItem
+}
+
+participant PhysicalStore identified by physicalId {
+  o String physicalId
+  o String firstName
+  o String lastName
+}
+
+participant Truck identified by truckId {
+  o String truckId
+  o String firstName
+  o String lastName
+}
+
+participant DistributionCenter identified by distributionId {
+  o String distributionId
+  o String firstName
+  o String lastName
+}
+
+asset Item identified by itemId {
+  o String itemId
+  o Integer Product_Weight
+  o String SKU
+  o String RMA_ID
+  o String Hazmat_Class
+  o Double Total_Retail_Value
+  o String Product_Description
+  o String Current_Owner
+}
+
+asset Return_Request identified by returnId {
+  o String returnId
+  o String value
+}
+
+transaction Return_Request {
+  --> Item asset
+  --> PhysicalStore pyshicalStore
+  --> Truck truckService
+  --> DistributionCenter distroCenter
+  --> WebsiteRequest webRequest
+}
+
+transaction Change_Of_Location_Of_Item {
+  --> Item asset
+  o String ownerId
+}
